@@ -1,0 +1,100 @@
+---
+title: "COVID-19 affect on Australia"
+output: html_document
+date: "2023-01-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(stringr)
+```
+
+```{r}
+covid_data <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv")
+#summary (covid_data)
+```
+The data being used is of COVID-19 data. This data set presents insights of: date, country, location, cases, deaths, hospitals, and mortality. Data being used for this analysis is a subset of the original COVID-19 data set. We will be looking at how COVID-19 has affected Australia over the last 2 years. 
+
+
+```{r, eval=FALSE}
+#unique(covid_data$location)
+#unique(covid_data$continent)
+
+empty_covid <- covid_data %>% filter(is.na(continent))
+empty_covid 
+
+unique(covid_data$continent)
+empty_covid2 <- covid_data %>% filter(continent == "" | location == "Africa")
+empty_covid2
+
+empty_covid_l <- covid_data %>% filter(location == "Africa")
+empty_covid_l
+
+empty_covid_lw <- covid_data %>% filter(location == "World")
+empty_covid_lw
+
+empty_covid_c <- covid_data %>% filter(continent == "Africa")
+empty_covid_c
+
+```
+
+```{r,}
+oc_data <- covid_data %>% 
+  select('continent', 'location', 'date', 'hosp_patients','new_deaths', 'total_deaths','people_vaccinated', 'total_boosters') %>%
+  filter(location == "Oceania"|continent == "Oceania") %>%
+  mutate(location = replace(location,location == "Oceania", "Australia"))
+```
+
+
+```{r,include=FALSE}
+oc_data$continent %>% replace_na('Oceania' )
+
+oc_data$people_vaccinated[is.na(oc_data$people_vaccinated)] <- 0
+oc_data$total_boosters[is.na(oc_data$total_boosters)] <- 0
+oc_data$hosp_patients[is.na(oc_data$hosp_patients)] <- 0
+oc_data$new_deaths[is.na(oc_data$new_deaths)] <- 0
+
+#head(oc_data)
+#tail(oc_data)
+```
+
+
+```{r}
+oc_start <- oc_data[oc_data$date >= "2020-03-01" & oc_data$date <="2022-12-31", ]
+head(oc_start)
+tail(oc_start)
+
+
+#oc_start$hosp_patients[is.na(oc_start$hosp_patients)] <- 0
+#oc_start$new_deaths[is.na(oc_start$new_deaths)] <- 0
+
+```
+
+
+```{r}
+library(ggplot2)
+
+
+
+ggplot(data = oc_start, aes(x = date, y =new_deaths)) + geom_point()
+#ggplot(data = oc_start, aes(x = date, y =hosp_patients)) + geom_point()
+```
+
+This first graph shows the increase of new COVID-19 deaths in Australia from their the first death recorded on March 1, 2020 to the end of this past year December 12, 2022. It is important to note that counts can also include probable deaths. We can see that there were two peaks on the new deaths in the year 2020. One at the start of the pandemic and then again towards the middle of the year. We can also see this occurrence happen in the years 2021 and 2022. However, from the middle of 2021 and onward, new death tolls have been at an all time high. 
+
+
+```{r,}
+oc_2022 <- oc_data[oc_data$date >= "2022-01-01" & oc_data$date <="2022-12-31", ]
+
+ggplot(data = oc_2022, aes(x = date, y =new_deaths)) + geom_point()
+ggplot(data = oc_2022, aes(x = date, y = total_boosters)) + geom_point()
+```
+This second graph takes a closer look at the new death tolls in 2022. We can see that the new death tolls have some consistency throughout the year. However, there is an even bigger peak in the months of July through October. We then start to see this decline as we approach 2023. Through further research, Australia’s flu season is during our summer months which is their winter months. We can also see this trend in the first graph with peaks being in the middle of the year. 
+
+
+As seen from the first graph there was a peak in the winter months of 2021; however, the COVID-19 death tolls did not decrease, they continued to increase. There was a new peak in January and then there was another peak in August. I believe the cause of the continuation of new COVID-19 deaths was due restrictions being lifted for COVID-19. Our winter months would be considered Australia’s summer months, so this leaves room for more tourists and more action within the community now that restrictions are lifted. Now because of this surge in cases it has continued into flu season. Now because some of these deaths are of probable cause, there may be some outliers when it comes to the data. On a positive note, There seems to be a decline in new deaths involving COVID-19 as we begin to enter 2023. This shows that the surge may be a cause of lock down and is now leveling as Australia enters a busy season. 
+
+
