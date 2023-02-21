@@ -21,3 +21,7 @@ Looking at the graphs created, I see there has been a big spike of new deaths th
 ## Conclusion:
 
 Based on my findings in the data, I believe we should start to see a fall in the new deaths within the next year. Not only because the new vaccine counts continue to increase, but because we are allowed more human interactions again. With the stay at home order in place for about a year, has caused some people to be susceptible to other viruses other than COVID-19. The new deaths recorded include possible COVID related deaths; therefore, leaving room for human error and outliers. 
+
+Future imporvments for this project:
+
+adding some statistical analyses done with the data of other eapects. Also look at a continent that has more countries to interpret and see how they differ from one another. I also could look at one indiviual country and interpret all aspects of the one country. I would also like to try to include an interactive graph. 
